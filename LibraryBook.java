@@ -2,8 +2,16 @@ package assign02;
 
 import java.util.GregorianCalendar;
 
+/**
+ * This class represents a library book that contains info on the book
+ * and the patron information and book due date.
+ *
+ * @author Adan Ibrahim and Haoqing Li
+ * @version August 31, 2024
+ */
 public class LibraryBook extends Book {
-    public int patronID = 0;
+    private int patronID;
+    private GregorianCalendar dueDate;
     /**
      * Creates a book from the given ISBN, author, and title.
      *
@@ -14,6 +22,8 @@ public class LibraryBook extends Book {
      */
     public LibraryBook(long isbn, String authorSurname, String authorOtherName, String title) {
         super(isbn, authorSurname, authorOtherName, title);
+        this.patronID = 0;
+        this.dueDate = null;
     }
 
     /**
@@ -22,7 +32,7 @@ public class LibraryBook extends Book {
      * @return Patron's ID number.
      */
     public int getPatron(){
-        return 0;
+        return this.patronID;
     }
 
     /**
@@ -31,8 +41,26 @@ public class LibraryBook extends Book {
      * @return Library book's due date.
      */
     public GregorianCalendar getDueDate(){
-        return null;
+        return this.dueDate;
     }
 
+    /**
+     * Returns the book checked out by the Patron.
+     * Sets the Patron to -1 and the due date to null.
+     */
+    public void checkInBook(){
+        this.patronID = -1;
+        this.dueDate = null;
+    }
 
+    /**
+     * Assigns the library book that is being checked out to a Patron
+     * and sets a due date for the book.
+     * @param patron
+     * @param dueDate
+     */
+    public void checkOutBook(int patron, GregorianCalendar dueDate){
+        this.patronID = patron;
+        this.dueDate = dueDate;
+    }
 }
