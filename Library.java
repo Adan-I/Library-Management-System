@@ -9,8 +9,8 @@ import java.util.Scanner;
 
 /**
  * This class represents a library, which is a collection of library books.
- * 
- * @author CS 2420 course staff and ?? 
+ *
+ * @author CS 2420 course staff and Adan Ibrahim and Haoqing Li
  * @version August 29, 2024
  */
 public class Library {
@@ -27,7 +27,7 @@ public class Library {
 	/**
 	 * Adds the book, with the given ISBN, author, and title information, to this
 	 * library. Assumes there is no possibility of duplicate library books.
-	 * 
+	 *
 	 * @param isbn - ISBN of the book to be added
 	 * @param authorSurname - surname of the author of the book to be added
 	 * @param authorOtherName - other name of the author of the book to be added
@@ -40,7 +40,7 @@ public class Library {
 	/**
 	 * Adds a list of library books to the library. Assumes there is no possibility
 	 * of duplicate library books.
-	 * 
+	 *
 	 * @param list - list of library books to be added
 	 */
 	public void addAll(ArrayList<LibraryBook> list) {
@@ -51,10 +51,10 @@ public class Library {
 	 * Adds the books specified by an input file to the library. Assumes the input
 	 * files specifies one book per line with ISBN, author, and title separated by
 	 * tabs, and the author surname before a comma.
-	 * 
+	 *
 	 * If file does not exist or a formatting rule is violated, prints an error
 	 * message and does not change the library.
-	 * 
+	 *
 	 * @param filename - name of the file containing information for the books to be
 	 *                 added
 	 */
@@ -109,25 +109,42 @@ public class Library {
 	 * checked out of the library. If there is no such patron, because no book with
 	 * the specified ISBN is in the library or the library book is not checked out,
 	 * returns -1.
-	 * 
+	 *
 	 * @param isbn - ISBN of the book to be looked up
 	 */
 	public int lookup(long isbn) {
-		// TODO: Replace return statement with code to accomplish the method contract above.
-		return 0;
+		for(LibraryBook target : library){
+			if(isbn == target.getIsbn()){
+				return target.getPatron();
+			}
+			else{
+				return -1;
+			}
+		}
+		if(library.size() < 1) {
+			return -1;
+		}
+		else{
+			return 0;
+		}
 	}
 
 	/**
 	 * Gets the list of library books checked out to the specified patron. If the
 	 * patron does not exist or has no books checked out of the library, returns an
 	 * empty list.
-	 * 
+	 *
 	 * @param patron - id of patron whose list of checked out books is being
 	 *               accessed
 	 */
 	public ArrayList<LibraryBook> lookup(int patron) {
-		// TODO: Replace return statement with code to accomplish the method contract above.
-		return null;
+		ArrayList<LibraryBook> books = new ArrayList<LibraryBook>();
+		for(LibraryBook target : library) {
+			if(patron == target.getPatron()){
+				books.add(target);
+			}
+		}
+		return books;
 	}
 
 	/**
@@ -135,7 +152,7 @@ public class Library {
 	 * patron and due date. If no book with the specified ISBN is in the library,
 	 * returns false. If the book with the specified ISBN is already checked out,
 	 * returns false. Otherwise, returns true.
-	 * 
+	 *
 	 * @param isbn - ISBN of the library book to be checked out
 	 * @param patron - id of the patron who checking this book out of the library
 	 * @param dueDate - date when this book is due to be returned to the library
@@ -145,7 +162,15 @@ public class Library {
 	 * @param year - year when this book is due to be returned to the library
 	 */
 	public boolean checkOut(long isbn, int patron, int month, int day, int year) {
-		// TODO: Replace return statement with code to accomplish the method contract above.
+		for(LibraryBook target : library){
+			if(isbn == target.getIsbn()) {
+				target.checkOutBook(patron, new GregorianCalendar(month, day, year));
+				return true;
+			}
+			if(isbn != target.getIsbn() || target.getPatron() != -1){
+				continue;
+			}
+		}
 		return false;
 	}
 
@@ -153,15 +178,23 @@ public class Library {
 	 * Gives the book with the specified ISBN back to the library by setting the
 	 * patron and due date to their default values. (I.e., returns the books, checks
 	 * the books back into the library)
-	 * 
+	 *
 	 * If no book with the specified ISBN is in the library, returns false. If the
 	 * book with the specified ISBN is not checked out, returns false. Otherwise,
 	 * returns true.
-	 * 
+	 *
 	 * @param isbn - ISBN of the book to be given back to the library
 	 */
 	public boolean checkIn(long isbn) {
-		// TODO: Replace return statement with code to accomplish the method contract above.
+		for(LibraryBook target : library){
+			if(isbn == target.getIsbn() && target.getPatron() != -1){
+				target.checkInBook();
+				return true;
+			}
+			if(isbn != target.getIsbn() || target.getPatron() == -1){
+				continue;
+			}
+		}
 		return false;
 	}
 
@@ -172,11 +205,22 @@ public class Library {
 	 *
 	 * If no library books are checked out by the patron, returns false; Otherwise,
 	 * returns true.
-	 * 
+	 *
 	 * @param patron - id of the patron returning all books to the library
 	 */
 	public boolean checkIn(int patron) {
-		// TODO: Replace return statement with code to accomplish the method contract above.
+		int totalBooks = 0;
+		for(LibraryBook target : library){
+			if(patron == target.getPatron()){
+				target.checkInBook();
+				totalBooks++;
+				if(totalBooks < library.size() - 1)
+				{
+					continue;
+				}
+				return true;
+			}
+		}
 		return false;
 	}
 }
